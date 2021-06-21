@@ -1,0 +1,21 @@
+name: Functional Tests (Parallels)
+description: Run the parallel-compliant functional tests.
+runs:
+  using: "composite"
+  steps:
+    # Create JWT Key File
+    - run: echo "$SFDX_AUTH_JWT_KEY" > server.key
+      shell: bash
+    # Install NPM dependencies
+    - run: |
+        npm ci
+        npm i -g sfdx-cli
+        sfdx --version
+        sfdx plugins --core
+      shell: bash
+    # Connect to DevHub organization
+    - run: sfdx force:auth:jwt:grant --clientid $SFDX_AUTH_JWT_CLIENT_ID --jwtkeyfile server.key --username $SFDX_AUTH_JWT_USERNAME --setdefaultdevhubusername
+      shell: bash
+    # Run acceptance tests
+    - run: npm run test:acceptance:parallels
+      shell: bash
