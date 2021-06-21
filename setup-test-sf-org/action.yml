@@ -1,5 +1,5 @@
-name: Functional Tests (Series)
-description: Run the non-parallel-compliant functional tests.
+name: Setup Salesforce Scratch Organization
+description: Setup the Salesforce scratch organization used to run the APEX and functional tests.
 runs:
   using: "composite"
   steps:
@@ -16,8 +16,6 @@ runs:
     # Connect to DevHub organization
     - run: sfdx force:auth:jwt:grant --clientid $SFDX_AUTH_JWT_CLIENT_ID --jwtkeyfile server.key --username $SFDX_AUTH_JWT_USERNAME --setdefaultdevhubusername
       shell: bash
-    # Run acceptance tests
-    - run: npm run test:acceptance:series
+    # Setup Scratch Organization
+    - run: npx ts-node -P test/acceptance/tsconfig.json utils/buildQAOrg.ts
       shell: bash
-      env:
-        COVEO_FUNC_TEST_SKIP_ORG_SETUP: true

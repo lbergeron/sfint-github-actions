@@ -1,5 +1,5 @@
-name: Functional Tests (Series)
-description: Run the non-parallel-compliant functional tests.
+name: Apex Unit Tests
+description: Runs the unit tests for the Apex code.
 runs:
   using: "composite"
   steps:
@@ -16,8 +16,8 @@ runs:
     # Connect to DevHub organization
     - run: sfdx force:auth:jwt:grant --clientid $SFDX_AUTH_JWT_CLIENT_ID --jwtkeyfile server.key --username $SFDX_AUTH_JWT_USERNAME --setdefaultdevhubusername
       shell: bash
-    # Run acceptance tests
-    - run: npm run test:acceptance:series
+    # Run the Apex tests
+    - run: |
+        mkdir -p test-results
+        sfdx force:apex:test:run -r junit -w 10 > test-results/apex.xml
       shell: bash
-      env:
-        COVEO_FUNC_TEST_SKIP_ORG_SETUP: true

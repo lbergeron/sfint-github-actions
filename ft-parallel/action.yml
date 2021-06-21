@@ -16,6 +16,9 @@ runs:
     # Connect to DevHub organization
     - run: sfdx force:auth:jwt:grant --clientid $SFDX_AUTH_JWT_CLIENT_ID --jwtkeyfile server.key --username $SFDX_AUTH_JWT_USERNAME --setdefaultdevhubusername
       shell: bash
+    
     # Run acceptance tests
     - run: npm run test:acceptance:parallels
       shell: bash
+      env:
+        COVEO_FUNC_TEST_SKIP_ORG_SETUP: true
