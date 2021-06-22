@@ -1,8 +1,8 @@
 name: Apex Unit Tests
 description: Runs the unit tests for the Apex code.
 inputs:
-  scratch-org-username:
-    description: "The username to access the scratch org"
+  scratch-org-name:
+    description: "The name to access the scratch org"
     required: true
 runs:
   using: "composite"
@@ -22,7 +22,7 @@ runs:
       shell: bash
 
     # Set the scratch org as the default
-    - run: sfdx config:set defaultusername=${{ inputs.scratch-org-username }}
+    - run: sfdx config:set defaultusername=${{ inputs.scratch-org-name }}
       shell: bash
 
     # Run the Apex tests
