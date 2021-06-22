@@ -25,5 +25,5 @@ runs:
       shell: bash
     # Return Scratch Org name as action output
     - id: retrieve-org-name
-      run: echo "::set-output name=org-name::$(cat config/project-scratch-def.json | grep -oP 'orgName.*' | grep -oP '(?<=\")[a-zA-Z0-9\-]*(?=\",)')"
+      run: echo "::set-output name=org-name::$(cat config/project-scratch-test-def.json | grep -oP 'orgName.*' | grep -oP '(?<=\")[a-zA-Z0-9\-]*(?=\",)')"
       shell: bash
