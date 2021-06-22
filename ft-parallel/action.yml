@@ -1,8 +1,14 @@
 name: Functional Tests (Parallels)
 description: Run the parallel-compliant functional tests.
 inputs:
-  scratch-org-name:
+  org-name:
     description: "The name to access the scratch org"
+    required: true
+  instance-url:
+    description: "The URL to access the scratch org"
+    required: true
+  user-name:
+    description: "The username to access the scratch org"
     required: true
 runs:
   using: "composite"
@@ -17,12 +23,8 @@ runs:
         sfdx --version
         sfdx plugins --core
       shell: bash
-    # Connect to DevHub organization
-    - run: sfdx force:auth:jwt:grant --clientid $SFDX_AUTH_JWT_CLIENT_ID --jwtkeyfile server.key --username $SFDX_AUTH_JWT_USERNAME --setdefaultdevhubusername
-      shell: bash
-    
-    # Set the scratch org as default
-    - run: sfdx config:set defaultusername=${{ inputs.scratch-org-name }}
+    # Connect to scratch organization
+    - run: sfdx force:auth:jwt:grant --clientid $SFDX_AUTH_JWT_CLIENT_ID --jwtkeyfile server.key --username ${{ inputs.user-name }} --instanceurl ${{ inputs.instance-url }} --setalias ${{ inputs.org-name }} --setdefaultusername
       shell: bash
 
     # Run acceptance tests

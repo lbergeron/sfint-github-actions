@@ -1,9 +1,15 @@
 name: Setup Salesforce Scratch Organization
 description: Setup the Salesforce scratch organization used to run the APEX and functional tests.
 outputs:
-  scratch-org-name:
+  org-name:
     description: "The name to access the scratch org"
-    value: ${{ steps.retrieve-org-name.outputs.org-name }}
+    value: ${{ steps.extract-org-name.outputs.org-name }}
+  instance-url:
+    description: "The URL to connect to the instance"
+    value: ${{ steps.extract-instance-url.outputs.instance-url }}
+  user-name:
+    description: "The username to access the scratch org"
+    value: ${{ steps.extract-user-name.outputs.user-name }}
 runs:
   using: "composite"
   steps:
@@ -23,7 +29,17 @@ runs:
     # Setup Scratch Organization
     - run: npx ts-node -P test/acceptance/tsconfig.json utils/buildQAOrg.ts
       shell: bash
-    # Return Scratch Org name as action output
-    - id: retrieve-org-name
-      run: echo "::set-output name=org-name::$(cat config/project-scratch-test-def.json | grep -oP 'orgName.*' | grep -oP '(?<=\")[a-zA-Z0-9\-]*(?=\",)')"
+
+    # Extract the org name as output
+    - id: extract-org-name
+      run: echo "::set-output name=org-name::$(cat config/project-scratch-test-def.json | grep -oP 'orgName.*' | grep -oP '(?<=\")[^\"]*(?=\",)')"
       shell: bash
+
+    # Extract the instance URL
+    - id: extract-instance-url
+      run: echo "::set-output name=instance-url::$(sfdx force:user:display -u ${{ steps.extract-org-name.outputs-org-name }} --json | grep -oP 'instanceUrl.*' | grep -oP '(?<=\")[^\"]*(?=\",)')"
+      shell: bash
+
+    # Extract the user name
+    - id: extract-user-name
+      run: echo "::set-output name=user-name::$(sfdx force:user:display -u ${{ steps.extract-org-name.outputs-org-name }} --json | grep -oP 'username.*' | grep -oP '(?<=\")[^\"]*(?=\",)')"
