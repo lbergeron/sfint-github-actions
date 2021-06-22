@@ -1,5 +1,9 @@
 name: Setup Salesforce Scratch Organization
 description: Setup the Salesforce scratch organization used to run the APEX and functional tests.
+outputs:
+  scratch-org-username:
+    description: "The username to access the scratch org"
+    value: ${{ steps.retrieve-username.outputs.username }}
 runs:
   using: "composite"
   steps:
@@ -18,4 +22,8 @@ runs:
       shell: bash
     # Setup Scratch Organization
     - run: npx ts-node -P test/acceptance/tsconfig.json utils/buildQAOrg.ts
+      shell: bash
+    # Return Scratch Org user name as action output
+    - id: retrieve-username
+      run: echo "::set-output name=username::$(sfdx force:user:display | grep -oP '[a-z0-9-]+@[a-z0-9]+\.[a-z0-9]+')"
       shell: bash

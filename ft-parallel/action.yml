@@ -1,5 +1,9 @@
 name: Functional Tests (Parallels)
 description: Run the parallel-compliant functional tests.
+inputs:
+  scratch-org-username:
+    description: "The username to access the scratch org"
+    required: true
 runs:
   using: "composite"
   steps:
@@ -17,6 +21,10 @@ runs:
     - run: sfdx force:auth:jwt:grant --clientid $SFDX_AUTH_JWT_CLIENT_ID --jwtkeyfile server.key --username $SFDX_AUTH_JWT_USERNAME --setdefaultdevhubusername
       shell: bash
     
+    # Set the scratch org as default
+    - run: sfdx config:set defaultusername=${{ inputs.scratch-org-username }}
+      shell: bash
+
     # Run acceptance tests
     - run: npm run test:acceptance:parallels
       shell: bash

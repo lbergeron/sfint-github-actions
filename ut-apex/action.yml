@@ -1,5 +1,9 @@
 name: Apex Unit Tests
 description: Runs the unit tests for the Apex code.
+inputs:
+  scratch-org-username:
+    description: "The username to access the scratch org"
+    required: true
 runs:
   using: "composite"
   steps:
@@ -16,6 +20,11 @@ runs:
     # Connect to DevHub organization
     - run: sfdx force:auth:jwt:grant --clientid $SFDX_AUTH_JWT_CLIENT_ID --jwtkeyfile server.key --username $SFDX_AUTH_JWT_USERNAME --setdefaultdevhubusername
       shell: bash
+
+    # Set the scratch org as the default
+    - run: sfdx config:set defaultusername=${{ inputs.scratch-org-username }}
+      shell: bash
+
     # Run the Apex tests
     - run: |
         mkdir -p test-results
