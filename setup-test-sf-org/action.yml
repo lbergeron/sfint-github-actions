@@ -43,3 +43,4 @@ runs:
     # Extract the user name
     - id: extract-user-name
       run: echo "::set-output name=user-name::$(sfdx force:user:display -u ${{ steps.extract-org-name.outputs-org-name }} --json | grep -oP 'username.*' | grep -oP '(?<=\")[^\"]*(?=\",)')"
+      shell: bash
