@@ -37,10 +37,10 @@ runs:
 
     # Extract the instance URL
     - id: extract-instance-url
-      run: echo "::set-output name=instance-url::$(sfdx force:user:display -u ${{ steps.extract-org-name.outputs-org-name }} --json | grep -oP 'instanceUrl.*' | grep -oP '(?<=\")[^\"]*(?=\",)')"
+      run: echo "::set-output name=instance-url::$(sfdx force:user:display -u ${{ steps.extract-org-name.outputs.org-name }} --json | grep -oP 'instanceUrl.*' | grep -oP '(?<=\")[^\"]*(?=\",)')"
       shell: bash
 
     # Extract the user name
     - id: extract-user-name
-      run: echo "::set-output name=user-name::$(sfdx force:user:display -u ${{ steps.extract-org-name.outputs-org-name }} --json | grep -oP 'username.*' | grep -oP '(?<=\")[^\"]*(?=\",)')"
+      run: echo "::set-output name=user-name::$(sfdx force:user:display -u ${{ steps.extract-org-name.outputs.org-name }} --json | grep -oP 'username.*' | grep -oP '(?<=\")[^\"]*(?=\",)')"
       shell: bash
