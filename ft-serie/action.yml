@@ -24,7 +24,7 @@ runs:
         sfdx plugins --core
       shell: bash
     # Connect to scratch organization
-    - run: sfdx force:auth:jwt:grant --clientid $SFDX_AUTH_JWT_CLIENT_ID --jwtkeyfile server.key --username ${{ inputs.user-name }} --instanceurl ${{ inputs.instance-url }} --setalias ${{ inputs.org-name }} --setdefaultusername
+    - run: sfdx force:auth:jwt:grant --clientid $SFDX_AUTH_JWT_CLIENT_ID --jwtkeyfile server.key --username ${{ inputs.user-name }} --instanceurl https://test.salesforce.com --setalias ${{ inputs.org-name }} --setdefaultusername
       shell: bash
 
     # Run acceptance tests
